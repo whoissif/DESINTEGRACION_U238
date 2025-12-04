@@ -201,11 +201,30 @@
             position: relative;
             margin-bottom: 25px;
             padding-left: 25px;
-            transition: transform 0.2s ease;
+            transition: all 0.3s ease;
+            opacity: 0.7;
+            transform: translateX(0);
         }
 
         .step:hover {
             transform: translateX(5px);
+        }
+
+        .step.highlighted {
+            opacity: 1 !important;
+            transform: translateX(15px) !important;
+            background: rgba(96, 165, 250, 0.15) !important;
+            border-left: 4px solid var(--primary) !important;
+            box-shadow: 0 0 20px rgba(96, 165, 250, 0.3) !important;
+            z-index: 10;
+            border-radius: 16px;
+        }
+
+        .step.highlighted::before {
+            border-color: var(--primary-light) !important;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light)) !important;
+            color: white !important;
+            animation: pulse 1.5s infinite;
         }
 
         .step::before {
@@ -245,6 +264,11 @@
             padding: 16px;
             border-radius: 16px;
             border-left: 4px solid var(--primary);
+        }
+
+        .step.highlighted .step-content {
+            background: rgba(96, 165, 250, 0.2) !important;
+            border-left: 4px solid var(--primary-light) !important;
         }
 
         .isotope {
@@ -327,10 +351,22 @@
             color: #bfdbfe;
         }
 
+        .step.highlighted .half-life {
+            background: rgba(96, 165, 250, 0.2) !important;
+            border-left-color: var(--primary-light) !important;
+            color: white !important;
+            font-weight: 700 !important;
+        }
+
         .half-life-value {
             font-family: 'Courier New', monospace;
             font-weight: 700;
             color: var(--primary);
+        }
+
+        .step.highlighted .half-life-value {
+            color: var(--primary-light) !important;
+            font-size: 1.1em !important;
         }
 
         .danger-highlight {
@@ -425,14 +461,10 @@
             }
         }
 
-        .pulse {
-            animation: pulse 2s infinite;
-        }
-
         @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(96, 165, 250, 0.4); }
-            70% { box-shadow: 0 0 0 10px rgba(96, 165, 250, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(96, 165, 250, 0); }
+            0% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7); }
+            70% { box-shadow: 0 0 0 12px rgba(255, 255, 255, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); }
         }
     </style>
 </head>
@@ -679,14 +711,12 @@
         function highlightStep(index) {
             // Remove all highlights
             steps.forEach(step => {
-                step.style.opacity = '0.7';
-                step.style.transform = 'none';
+                step.classList.remove('highlighted');
             });
             
             // Highlight current step
             if (index >= 0 && index < steps.length) {
-                steps[index].style.opacity = '1';
-                steps[index].style.transform = 'translateX(10px)';
+                steps[index].classList.add('highlighted');
                 steps[index].scrollIntoView({ behavior: 'smooth', block: 'center' });
             }
         }
@@ -700,7 +730,7 @@
             highlightStep(-1);
             playBtn.innerHTML = '<i class="fas fa-play"></i> Reproducir';
             steps.forEach(step => {
-                step.style.opacity = '1';
+                step.style.opacity = '0.7';
                 step.style.transform = 'none';
             });
         }
